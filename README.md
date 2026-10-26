@@ -5,7 +5,8 @@ This repository shows how to embed a map created in [GeoNode](https://geonode.or
 Live demos:
 
 - Option 1 (iframe): https://bertt.github.io/geonode_embed_map/
-- Option 2 (Leaflet, WMS/WFS): https://bertt.github.io/geonode_embed_map/leaflet.html
+- Option 2 (Leaflet, WMS): https://bertt.github.io/geonode_embed_map/leaflet.html
+- Option 2 (MapLibre, WMS): https://bertt.github.io/geonode_embed_map/maplibre-wms.html and https://bertt.github.io/geonode_embed_map/maplibre-popup.html
 
 > Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/catalogue/#/maps and update the URL in `index.html`.
 
@@ -52,7 +53,14 @@ Use the OGC services of the layers in your map (WMS/WFS/WMTS):
 </script>
 ```
 
-Live example (WMS layer, zoomed to the layer extent): https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
+Live examples with Leaflet:
+
+- WMS layer, zoomed to the layer extent: https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
+
+Live examples with MapLibre GL JS:
+
+- WMS raster layer: https://bertt.github.io/geonode_embed_map/maplibre-wms.html (source: [`maplibre-wms.html`](maplibre-wms.html))
+- WMS layer with click popups (GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html (source: [`maplibre-popup.html`](maplibre-popup.html))
 
 WMS images usually work without extra setup; for WFS/GeoJSON requests enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode.
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeoNode WMS layer with click popups in MapLibre GL JS</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 960px; padding: 1rem; }
+    #map { height: 600px; border: 1px solid #ccc; }
+    .maplibregl-popup-content th { text-align: left; padding-right: 8px; vertical-align: top; }
+  </style>
+</head>
+<body>
+  <h1>GeoNode WMS layer with click popups in MapLibre GL JS</h1>
+  <p>
+    Click a point of the layer of GeoNode map
+    <a href="https://stable.demo.geonode.org/catalogue/#/map/19196">Entidades_PVCV</a>
+    to see its attributes (WMS GetFeatureInfo).
+  </p>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+    // Replace with your own GeoNode host and layer name (workspace:name)
+    const GEONODE = 'https://stable.demo.geonode.org';
+    const LAYER = 'geonode:entidades_pvcv_91ebc7d3f40b8ea135609353edfbf2c5';
+    const OWS = `${GEONODE}/geoserver/ows`;
+    const BOUNDS = [[-0.945, 37.986], [0.474, 40.504]];
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      bounds: BOUNDS,
+      fitBoundsOptions: { padding: 20 },
+      style: {
+        version: 8,
+        sources: {
+          osm: {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; OpenStreetMap contributors'
+          },
+          geonode: {
+            type: 'raster',
+            tileSize: 256,
+            tiles: [
+              `${OWS}?service=WMS&version=1.1.1&request=GetMap&layers=${LAYER}` +
+              `&styles=&format=image/png&transparent=true&srs=EPSG:3857` +
+              `&width=256&height=256&bbox={bbox-epsg-3857}`
+            ]
+          }
+        },
+        layers: [
+          { id: 'osm', type: 'raster', source: 'osm' },
+          { id: 'geonode', type: 'raster', source: 'geonode' }
+        ]
+      }
+    });
+    map.addControl(new maplibregl.NavigationControl());
+    map.getCanvas().style.cursor = 'pointer';
+
+    const escapeHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    // Map bounds in EPSG:3857 meters, so the clicked pixel maps linearly onto the bbox
+    const R = 20037508.342789244;
+    const toMeters = lngLat => {
+      const m = maplibregl.MercatorCoordinate.fromLngLat(lngLat);
+      return [(m.x - 0.5) * 2 * R, (0.5 - m.y) * 2 * R];
+    };
+
+    // GetFeatureInfo for the clicked pixel; GeoServer must allow CORS (it does on the demo)
+    map.on('click', async (e) => {
+      const b = map.getBounds();
+      const [minX, minY] = toMeters(b.getSouthWest());
+      const [maxX, maxY] = toMeters(b.getNorthEast());
+      const { x, y } = e.point;
+      const { clientWidth: w, clientHeight: h } = map.getCanvas();
+      const url = `${OWS}?service=WMS&version=1.1.1&request=GetFeatureInfo` +
+        `&layers=${LAYER}&query_layers=${LAYER}&styles=&srs=EPSG:3857` +
+        `&bbox=${minX},${minY},${maxX},${maxY}` +
+        `&width=${w}&height=${h}&x=${Math.round(x)}&y=${Math.round(y)}` +
+        `&info_format=application/json&feature_count=1`;
+      const data = await (await fetch(url)).json();
+      if (!data.features.length) return;
+      const rows = Object.entries(data.features[0].properties)
+        .filter(([, v]) => v !== null && v !== '')
+        .map(([k, v]) => `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(v)}</td></tr>`).join('');
+      new maplibregl.Popup({ maxWidth: '360px' })
+        .setLngLat(e.lngLat)
+        .setHTML(`<table>${rows}</table>`)
+        .addTo(map);
+    });
+  </script>
+</body>
+</html>
