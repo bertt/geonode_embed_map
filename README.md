@@ -19,12 +19,12 @@ Live example: https://bertt.github.io/geonode_embed_map/iframe.html (source: [`i
 GeoNode provides an embed URL for every map. In GeoNode 5 the map page is `https://YOUR-GEONODE/catalogue/#/map/<MAP_ID>` and the embed URL is:
 
 ```
-https://YOUR-GEONODE/maps/<MAP_ID>/embed
+https://YOUR-GEONODE/map/<MAP_ID>/embed
 ```
 
 ```html
 <iframe
-  src="https://YOUR-GEONODE/maps/<MAP_ID>/embed"
+  src="https://YOUR-GEONODE/map/<MAP_ID>/embed"
   style="width:100%;height:600px;border:0"
   allowfullscreen>
 </iframe>
@@ -35,13 +35,13 @@ GeoNode 5 (REST API v2) also returns the exact embed URL, so you don't have to b
 ```js
 const res = await fetch('https://YOUR-GEONODE/api/v2/maps/<MAP_ID>');
 const { map } = await res.json();
-document.querySelector('iframe').src = map.embed_url; // https://YOUR-GEONODE/maps/<MAP_ID>/embed
+document.querySelector('iframe').src = map.embed_url; // the embed URL of the map
 ```
 
 Steps:
 
 1. In GeoNode, make the map publicly viewable (map page → *Share* / *Permissions* → allow *Anyone* to view). Make sure the layers used in the map are public too.
-2. Take the map ID from the map URL and append `/embed` to `https://YOUR-GEONODE/maps/<MAP_ID>`. The map URL looks like `/catalogue/#/map/<MAP_ID>` in GeoNode 4.x and 5.x, or `/maps/<MAP_ID>/` in older versions.
+2. Take the map ID from the map URL and append `/embed` to `https://YOUR-GEONODE/map/<MAP_ID>`. The map URL looks like `/catalogue/#/map/<MAP_ID>` in GeoNode 4.x and 5.x, or `/maps/<MAP_ID>/` in older versions.
 3. Put the iframe in your HTML page (see [`iframe.html`](iframe.html)).
 4. Your GeoNode must be served over **HTTPS**, otherwise browsers block it as mixed content on an HTTPS website.
 5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOUR-SITE`. Also check that a reverse proxy (nginx/Apache) does not add its own `X-Frame-Options` header.
@@ -52,7 +52,7 @@ The same pattern works for the other GeoNode resources, only the path of the emb
 
 | Resource | Embed URL |
 |----------|-----------|
-| Maps | `https://YOUR-GEONODE/maps/<ID>/embed` |
+| Maps | `https://YOUR-GEONODE/map/<ID>/embed` |
 | Datasets | `https://YOUR-GEONODE/datasets/<LAYER_NAME>/embed` |
 | Documents | `https://YOUR-GEONODE/documents/<ID>/embed` |
 | Dashboards | `https://YOUR-GEONODE/apps/<ID>/embed` |
@@ -62,7 +62,7 @@ Note that for datasets the layer name (e.g. `geonode:my_layer`) is used in the U
 
 ### GeoNode 5
 
-- The `/maps/<MAP_ID>/embed` URL is used the same way in GeoNode 5. The demo instance used here runs the current GeoNode MapStore client and the embed URL works there.
+- The embed URL for maps is written as `/map/<MAP_ID>/embed` in GeoNode 5. Note that the public demo instance used here (`stable.demo.geonode.org`) currently only serves `/maps/<MAP_ID>/embed` (the `embed_url` returned by its API) and returns 404 for `/map/<MAP_ID>/embed`, so the live demo in [`iframe.html`](iframe.html) uses that form. Check which form your instance supports.
 - In GeoNode 5 the map's *Share* dialog may only show the source URL and no embed snippet (a similar report exists for GeoStories: [GeoNode/geonode#13867](https://github.com/GeoNode/geonode/issues/13867)). Build the embed URL yourself from the map ID as described above.
 - The map ID is also available from the API: `https://YOUR-GEONODE/api/v2/maps/<MAP_ID>` returns `embed_url`, `detail_url` and the extent (`ll_bbox_polygon`).
 - Embedding and CORS depend on the security headers and settings of your deployment, so test the iframe from your own site's origin.
