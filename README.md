@@ -1,6 +1,6 @@
-# Embed a GeoNode map in a GitHub Pages site
+# Embed a GeoNode map in an external site
 
-This repository shows how to embed a map created in [GeoNode](https://geonode.org) in a static HTML page hosted on GitHub Pages. The examples use map [Entidades_PVCV](https://stable.demo.geonode.org/catalogue/#/map/19196) from the public demo instance `stable.demo.geonode.org`.
+This repository shows how to embed a map created in [GeoNode](https://geonode.org) in an external static HTML page hosted. The examples use map [Entidades_PVCV](https://stable.demo.geonode.org/catalogue/#/map/19196) from the public demo instance `stable.demo.geonode.org`.
 
 Live demos:
 
