@@ -1,6 +1,6 @@
 # Embed a GeoNode map in a GitHub Pages site
 
-This repository shows how to embed a map created in [GeoNode](https://geonode.org) in a static HTML page hosted on GitHub Pages. The example uses a map from the public demo instance `stable.demo.geonode.org`.
+This repository shows how to embed a map created in [GeoNode](https://geonode.org) in a static HTML page hosted on GitHub Pages. The examples use map [Entidades_PVCV](https://stable.demo.geonode.org/catalogue/#/map/19196) from the public demo instance `stable.demo.geonode.org`.
 
 Live demos:
 
@@ -52,7 +52,7 @@ Use the OGC services of the layers in your map (WMS/WFS/WMTS):
 </script>
 ```
 
-Live example (WMS layer plus clickable WFS features): https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
+Live example (WMS layer, zoomed to the layer extent): https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
 
 WMS images usually work without extra setup; for WFS/GeoJSON requests enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode.
 

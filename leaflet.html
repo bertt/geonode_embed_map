@@ -13,8 +13,9 @@
 <body>
   <h1>GeoNode layers in a custom Leaflet map</h1>
   <p>
-    Layer <code>geonode:dados_dos_postos_prfs</code> from the public GeoNode demo instance,
-    shown as a WMS layer and as clickable WFS (GeoJSON) features.
+    The layer of GeoNode map
+    <a href="https://stable.demo.geonode.org/catalogue/#/map/19196">Entidades_PVCV</a>
+    (public demo instance), shown as a WMS layer on an OpenStreetMap basemap.
   </p>
   <div id="map"></div>
 
@@ -22,10 +23,12 @@
   <script>
     // Replace with your own GeoNode host and layer name (workspace:name)
     const GEONODE = 'https://stable.demo.geonode.org';
-    const LAYER = 'geonode:dados_dos_postos_prfs';
+    const LAYER = 'geonode:entidades_pvcv_91ebc7d3f40b8ea135609353edfbf2c5';
+    // Layer extent as [[south, west], [north, east]] (see ll_bbox_polygon in /api/v2/maps/<ID>)
+    const BOUNDS = [[37.986, -0.945], [40.504, 0.474]];
     const OWS = `${GEONODE}/geoserver/ows`;
 
-    const map = L.map('map').setView([-15, -48], 4);
+    const map = L.map('map').fitBounds(BOUNDS);
     const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -34,21 +37,7 @@
       layers: LAYER, format: 'image/png', transparent: true
     }).addTo(map);
 
-    // WFS as GeoJSON: requires CORS to be enabled on the GeoServer (it is on the demo)
-    const wfsUrl = `${OWS}?service=WFS&version=1.0.0&request=GetFeature` +
-      `&typeName=${LAYER}&outputFormat=application/json&maxFeatures=500&srsName=EPSG:4326`;
-    const wfs = L.geoJSON(null, {
-      pointToLayer: (f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#c00' }),
-      onEachFeature: (f, layer) => {
-        const rows = Object.entries(f.properties)
-          .map(([k, v]) => `<tr><th>${k}</th><td>${v ?? ''}</td></tr>`).join('');
-        layer.bindPopup(`<table>${rows}</table>`);
-      }
-    }).addTo(map);
-
-    fetch(wfsUrl).then(r => r.json()).then(data => wfs.addData(data));
-
-    L.control.layers({ OpenStreetMap: osm }, { 'WMS layer': wms, 'WFS features': wfs }).addTo(map);
+    L.control.layers({ OpenStreetMap: osm }, { 'WMS layer': wms }).addTo(map);
   </script>
 </body>
 </html>
