@@ -19,7 +19,7 @@ Live example: https://bertt.github.io/geonode_embed_map/iframe.html (source: [`i
 GeoNode provides an embed URL for every map. In GeoNode 5 the map page is `https://YOUR-GEONODE/catalogue/#/map/<MAP_ID>` and the embed URL is:
 
 ```
-https://YOUR-GEONODE/map/<MAP_ID>/embed
+https://YOUR-GEONODE/maps/<MAP_ID>/embed
 ```
 
 ```html
