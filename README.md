@@ -14,6 +14,8 @@ Live demos:
 
 Live example: https://bertt.github.io/geonode_embed_map/ (source: [`index.html`](index.html))
 
+![GeoNode map embedded with an iframe](images/iframe-example.png)
+
 GeoNode provides an embed URL for every map:
 
 ```
