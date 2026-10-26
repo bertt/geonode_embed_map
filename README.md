@@ -2,7 +2,7 @@
 
 This repository shows how to embed a map created in [GeoNode](https://geonode.org) in a static HTML page hosted on GitHub Pages. The example uses a map from the public demo instance `stable.demo.geonode.org`.
 
-Live demo: https://bertt.github.io/embed_map/
+Live demo: https://bertt.github.io/geonode_embed_map/
 
 > Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/maps/ and update the URL in `index.html`.
 
@@ -58,6 +58,6 @@ WMS images usually work without extra setup; for WFS/GeoJSON requests enable **C
 Or with the GitHub CLI:
 
 ```sh
-gh repo create embed_map --public --source . --push
-gh api -X POST repos/YOURNAME/embed_map/pages -f "source[branch]=main" -f "source[path]=/"
+gh repo create geonode_embed_map --public --source . --push
+gh api -X POST repos/YOURNAME/geonode_embed_map/pages -f "source[branch]=main" -f "source[path]=/"
 ```
