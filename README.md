@@ -46,6 +46,20 @@ Steps:
 4. Your GeoNode must be served over **HTTPS**, otherwise browsers block it as mixed content on an HTTPS website.
 5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOUR-SITE`. Also check that a reverse proxy (nginx/Apache) does not add its own `X-Frame-Options` header.
 
+### Other resource types
+
+The same pattern works for the other GeoNode resources, only the path of the embed URL differs:
+
+| Resource | Embed URL |
+|----------|-----------|
+| Maps | `https://YOUR-GEONODE/maps/<ID>/embed` |
+| Datasets | `https://YOUR-GEONODE/datasets/<LAYER_NAME>/embed` |
+| Documents | `https://YOUR-GEONODE/documents/<ID>/embed` |
+| Dashboards | `https://YOUR-GEONODE/apps/<ID>/embed` |
+| GeoStories | `https://YOUR-GEONODE/apps/<ID>/embed` |
+
+Note that for datasets the layer name (e.g. `geonode:my_layer`) is used in the URL instead of the resource ID.
+
 ### GeoNode 5
 
 - The `/maps/<MAP_ID>/embed` URL is used the same way in GeoNode 5. The demo instance used here runs the current GeoNode MapStore client and the embed URL works there.
