@@ -59,6 +59,8 @@ Live examples with Leaflet:
 
 - WMS layer, zoomed to the layer extent: https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
 
+![GeoNode layer in a Leaflet map](images/leaflet-example.png)
+
 Live examples with MapLibre GL JS:
 
 - WMS raster layer: https://bertt.github.io/geonode_embed_map/maplibre-wms.html (source: [`maplibre-wms.html`](maplibre-wms.html))
