@@ -66,6 +66,8 @@ Live examples with MapLibre GL JS:
 - WMS raster layer: https://bertt.github.io/geonode_embed_map/maplibre-wms.html (source: [`maplibre-wms.html`](maplibre-wms.html))
 - WMS layer with click popups (GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html (source: [`maplibre-popup.html`](maplibre-popup.html))
 
+![GeoNode layer in a MapLibre GL JS map](images/maplibre-example.png)
+
 WMS images usually work without extra setup; for WFS/GeoJSON requests enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode.
 
 ## Publish on GitHub Pages
