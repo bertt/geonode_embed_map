@@ -16,7 +16,7 @@ Live example: https://bertt.github.io/geonode_embed_map/iframe.html (source: [`i
 
 ![GeoNode map embedded with an iframe](images/iframe-example.png)
 
-GeoNode provides an embed URL for every map:
+GeoNode provides an embed URL for every map. In GeoNode 5 the map page is `https://YOUR-GEONODE/catalogue/#/map/<MAP_ID>` and the embed URL is:
 
 ```
 https://YOUR-GEONODE/maps/<MAP_ID>/embed
@@ -28,6 +28,14 @@ https://YOUR-GEONODE/maps/<MAP_ID>/embed
   style="width:100%;height:600px;border:0"
   allowfullscreen>
 </iframe>
+```
+
+GeoNode 5 (REST API v2) also returns the exact embed URL, so you don't have to build it yourself:
+
+```js
+const res = await fetch('https://YOUR-GEONODE/api/v2/maps/<MAP_ID>');
+const { map } = await res.json();
+document.querySelector('iframe').src = map.embed_url; // https://YOUR-GEONODE/maps/<MAP_ID>/embed
 ```
 
 Steps:
@@ -47,7 +55,16 @@ Steps:
 
 ## Option 2: custom map with MapLibre GL JS
 
-Use the OGC services of the layers in your map. This example shows the layer as a WMS raster source and queries the attributes of a clicked feature with WMS GetFeatureInfo:
+Use the OGC services of the layers in your map. In GeoNode 5 the layer names (`alternate`, e.g. `geonode:my_layer`) and extent are available from the REST API v2:
+
+```js
+const res = await fetch('https://YOUR-GEONODE/api/v2/maps/<MAP_ID>?include[]=maplayers');
+const { map } = await res.json();
+const layers = map.maplayers.map(l => l.dataset.alternate);   // ['geonode:LAYER_NAME', ...]
+const [[w, s], , [e, n]] = map.ll_bbox_polygon.coordinates[0];  // extent as lon/lat
+```
+
+This example shows a layer as a WMS raster source and queries the attributes of a clicked feature with WMS GetFeatureInfo:
 
 ```js
 map.addSource('geonode', {
@@ -58,6 +75,7 @@ map.addSource('geonode', {
     '&srs=EPSG:3857&width=256&height=256&bbox={bbox-epsg-3857}']
 });
 map.addLayer({ id: 'geonode', type: 'raster', source: 'geonode' });
+map.fitBounds([[w, s], [e, n]]);
 ```
 
 Live example (WMS layer with click popups using GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html (source: [`maplibre-popup.html`](maplibre-popup.html))
