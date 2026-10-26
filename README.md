@@ -5,8 +5,7 @@ This repository shows how to embed a map created in [GeoNode](https://geonode.or
 Live demos:
 
 - Option 1 (iframe): https://bertt.github.io/geonode_embed_map/
-- Option 2 (Leaflet, WMS): https://bertt.github.io/geonode_embed_map/leaflet.html
-- Option 2 (MapLibre, WMS): https://bertt.github.io/geonode_embed_map/maplibre-wms.html and https://bertt.github.io/geonode_embed_map/maplibre-popup.html
+- Option 2 (MapLibre, WMS + GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html
 
 > Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/catalogue/#/maps and update the URL in `index.html`.
 
@@ -38,37 +37,26 @@ Steps:
 4. Your GeoNode must be served over **HTTPS**, otherwise browsers block it as mixed content on an HTTPS GitHub Pages site.
 5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOURNAME.github.io`.
 
-## Option 2: custom map with Leaflet / OpenLayers / MapLibre
+## Option 2: custom map with MapLibre GL JS
 
-Use the OGC services of the layers in your map (WMS/WFS/WMTS):
+Use the OGC services of the layers in your map. This example shows the layer as a WMS raster source and queries the attributes of a clicked feature with WMS GetFeatureInfo:
 
-```html
-<div id="map" style="height:600px"></div>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-  const map = L.map('map').setView([52.1, 5.3], 7);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-  L.tileLayer.wms('https://YOUR-GEONODE/geoserver/ows', {
-    layers: 'geonode:LAYER_NAME', format: 'image/png', transparent: true
-  }).addTo(map);
-</script>
+```js
+map.addSource('geonode', {
+  type: 'raster',
+  tileSize: 256,
+  tiles: ['https://YOUR-GEONODE/geoserver/ows?service=WMS&version=1.1.1&request=GetMap' +
+    '&layers=geonode:LAYER_NAME&styles=&format=image/png&transparent=true' +
+    '&srs=EPSG:3857&width=256&height=256&bbox={bbox-epsg-3857}']
+});
+map.addLayer({ id: 'geonode', type: 'raster', source: 'geonode' });
 ```
 
-Live examples with Leaflet:
-
-- WMS layer, zoomed to the layer extent: https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
-
-![GeoNode layer in a Leaflet map](images/leaflet-example.png)
-
-Live examples with MapLibre GL JS:
-
-- WMS raster layer: https://bertt.github.io/geonode_embed_map/maplibre-wms.html (source: [`maplibre-wms.html`](maplibre-wms.html))
-- WMS layer with click popups (GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html (source: [`maplibre-popup.html`](maplibre-popup.html))
+Live example (WMS layer with click popups using GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html (source: [`maplibre-popup.html`](maplibre-popup.html))
 
 ![GeoNode layer in a MapLibre GL JS map](images/maplibre-example.png)
 
-WMS images usually work without extra setup; for WFS/GeoJSON requests enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode.
+GetFeatureInfo requests from your page are cross-origin: enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode (the demo already does).
 
 ## Publish on GitHub Pages
 
