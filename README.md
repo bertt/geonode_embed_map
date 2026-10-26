@@ -50,19 +50,19 @@ Steps:
 
 The same pattern works for the other GeoNode resources, only the path of the embed URL differs:
 
-| Resource | Embed URL |
-|----------|-----------|
-| Maps | `https://YOUR-GEONODE/maps/<ID>/embed` |
-| Datasets | `https://YOUR-GEONODE/datasets/<LAYER_NAME>/embed` |
-| Documents | `https://YOUR-GEONODE/documents/<ID>/embed` |
-| Dashboards | `https://YOUR-GEONODE/apps/<ID>/embed` |
-| GeoStories | `https://YOUR-GEONODE/apps/<ID>/embed` |
+| Resource | Embed URL | Example (demo instance) |
+|----------|-----------|-------------------------|
+| Maps | `https://YOUR-GEONODE/maps/<ID>/embed` | https://stable.demo.geonode.org/maps/19196/embed |
+| Datasets | `https://YOUR-GEONODE/datasets/<LAYER_NAME>/embed` | https://stable.demo.geonode.org/datasets/geonode:dados_dos_postos_prfs/embed |
+| Documents | `https://YOUR-GEONODE/documents/<ID>/embed` | https://stable.demo.geonode.org/documents/19150/embed |
+| Dashboards | `https://YOUR-GEONODE/apps/<ID>/embed` | https://stable.demo.geonode.org/apps/19413/embed |
+| GeoStories | `https://YOUR-GEONODE/apps/<ID>/embed` | https://stable.demo.geonode.org/apps/19259/embed |
 
-Note that for datasets the layer name (e.g. `geonode:my_layer`) is used in the URL instead of the resource ID.
+Note that for datasets the layer name (e.g. `geonode:my_layer`) is used in the URL instead of the resource ID. The demo instance is reset periodically, so these examples may disappear; list current resources with `https://stable.demo.geonode.org/api/v2/datasets`, `/documents`, `/maps` and `/geoapps` (each result has an `embed_url`).
 
 ### GeoNode 5
 
-- The embed URL of a map is `/maps/<MAP_ID>/embed`, for example `https://hhr.bertha.geodan.nl/maps/337/embed`.
+- The embed URL of a map is `/maps/<MAP_ID>/embed`, for example `https://stable.demo.geonode.org/maps/19196/embed`.
 - In GeoNode 5 the map's *Share* dialog may only show the source URL and no embed snippet (a similar report exists for GeoStories: [GeoNode/geonode#13867](https://github.com/GeoNode/geonode/issues/13867)). Build the embed URL yourself from the map ID as described above.
 - The map ID is also available from the API: `https://YOUR-GEONODE/api/v2/maps/<MAP_ID>` returns `embed_url`, `detail_url` and the extent (`ll_bbox_polygon`).
 - Embedding and CORS depend on the security headers and settings of your deployment, so test the iframe from your own site's origin.
