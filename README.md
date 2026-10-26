@@ -4,14 +4,15 @@ This repository shows how to embed a map created in [GeoNode](https://geonode.or
 
 Live demos:
 
-- Option 1 (iframe): https://bertt.github.io/geonode_embed_map/
+- Overview: https://bertt.github.io/geonode_embed_map/
+- Option 1 (iframe): https://bertt.github.io/geonode_embed_map/iframe.html
 - Option 2 (MapLibre, WMS + GetFeatureInfo): https://bertt.github.io/geonode_embed_map/maplibre-popup.html
 
-> Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/catalogue/#/maps and update the URL in `index.html`.
+> Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/catalogue/#/maps and update the URL in `iframe.html` and `maplibre-popup.html`.
 
 ## Option 1: iframe (simplest)
 
-Live example: https://bertt.github.io/geonode_embed_map/ (source: [`index.html`](index.html))
+Live example: https://bertt.github.io/geonode_embed_map/iframe.html (source: [`iframe.html`](iframe.html))
 
 ![GeoNode map embedded with an iframe](images/iframe-example.png)
 
@@ -33,7 +34,7 @@ Steps:
 
 1. In GeoNode, make the map publicly viewable (map page → *Share* / *Permissions* → allow *Anyone* to view). Make sure the layers used in the map are public too.
 2. Take the map ID from the map URL (e.g. `/catalogue/#/map/<MAP_ID>` in GeoNode 4.x+, or `/maps/<MAP_ID>/` in older versions) and append `/embed` to `https://YOUR-GEONODE/maps/<MAP_ID>`.
-3. Put the iframe in your `index.html`.
+3. Put the iframe in your HTML page (see [`iframe.html`](iframe.html)).
 4. Your GeoNode must be served over **HTTPS**, otherwise browsers block it as mixed content on an HTTPS website.
 5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOUR-SITE`.
 

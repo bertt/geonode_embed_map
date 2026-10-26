@@ -3,27 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GeoNode map embedded in a website</title>
+  <title>Embed a GeoNode map in an external site</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 960px; padding: 1rem; }
-    iframe { width: 100%; height: 600px; border: 1px solid #ccc; }
+    body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 720px; padding: 1rem; line-height: 1.5; }
+    li { margin-bottom: 1rem; }
   </style>
 </head>
 <body>
-  <h1>GeoNode map embedded in a website</h1>
+  <h1>Embed a GeoNode map in an external site</h1>
   <p>
-    Example map from the public GeoNode demo instance
-    (<a href="https://stable.demo.geonode.org/catalogue/#/map/19196">open in GeoNode</a>).
+    <a href="https://geonode.org">GeoNode</a> maps and layers can be used in any static HTML page.
+    These examples use the map
+    <a href="https://stable.demo.geonode.org/catalogue/#/map/19196">Entidades_PVCV</a>
+    from the public GeoNode demo instance <code>stable.demo.geonode.org</code>.
+    There are two approaches:
   </p>
 
-  <!-- Replace the host and map ID with your own: https://YOUR-GEONODE/maps/<ID>/embed -->
-  <iframe
-    src="https://stable.demo.geonode.org/maps/19196/embed"
-    title="GeoNode map"
-    loading="lazy"
-    allowfullscreen>
-  </iframe>
+  <ul>
+    <li>
+      <strong><a href="iframe.html">1. iframe</a></strong><br>
+      Embed the complete GeoNode map viewer with GeoNode's <code>/maps/&lt;ID&gt;/embed</code> URL.
+      Simplest, and keeps the map's styling and layers exactly as configured in GeoNode.
+    </li>
+    <li>
+      <strong><a href="maplibre-popup.html">2. Custom map with MapLibre GL JS</a></strong><br>
+      Build your own map and load the GeoNode layer via the WMS service of GeoServer.
+      Clicking a feature shows its attributes using WMS GetFeatureInfo.
+    </li>
+  </ul>
 
-  <p>See also the custom MapLibre map with click popups (option 2): <a href="maplibre-popup.html">maplibre-popup.html</a>.</p>
+  <p>
+    Instructions and source code:
+    <a href="https://github.com/bertt/geonode_embed_map">github.com/bertt/geonode_embed_map</a>.
+  </p>
 </body>
 </html>
