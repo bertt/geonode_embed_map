@@ -33,10 +33,17 @@ https://YOUR-GEONODE/maps/<MAP_ID>/embed
 Steps:
 
 1. In GeoNode, make the map publicly viewable (map page → *Share* / *Permissions* → allow *Anyone* to view). Make sure the layers used in the map are public too.
-2. Take the map ID from the map URL (e.g. `/catalogue/#/map/<MAP_ID>` in GeoNode 4.x+, or `/maps/<MAP_ID>/` in older versions) and append `/embed` to `https://YOUR-GEONODE/maps/<MAP_ID>`.
+2. Take the map ID from the map URL and append `/embed` to `https://YOUR-GEONODE/maps/<MAP_ID>`. The map URL looks like `/catalogue/#/map/<MAP_ID>` in GeoNode 4.x and 5.x, or `/maps/<MAP_ID>/` in older versions.
 3. Put the iframe in your HTML page (see [`iframe.html`](iframe.html)).
 4. Your GeoNode must be served over **HTTPS**, otherwise browsers block it as mixed content on an HTTPS website.
-5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOUR-SITE`.
+5. If the iframe stays empty, GeoNode may forbid framing. In `local_settings.py`/environment, allow it, e.g. `X_FRAME_OPTIONS = "ALLOWALL"` or a CSP header such as `frame-ancestors https://YOUR-SITE`. Also check that a reverse proxy (nginx/Apache) does not add its own `X-Frame-Options` header.
+
+### GeoNode 5
+
+- The `/maps/<MAP_ID>/embed` URL is used the same way in GeoNode 5. The demo instance used here runs the current GeoNode MapStore client and the embed URL works there.
+- In GeoNode 5 the map's *Share* dialog may only show the source URL and no embed snippet (a similar report exists for GeoStories: [GeoNode/geonode#13867](https://github.com/GeoNode/geonode/issues/13867)). Build the embed URL yourself from the map ID as described above.
+- The map ID is also available from the API: `https://YOUR-GEONODE/api/v2/maps/<MAP_ID>` returns `embed_url`, `detail_url` and the extent (`ll_bbox_polygon`).
+- Embedding and CORS depend on the security headers and settings of your deployment, so test the iframe from your own site's origin.
 
 ## Option 2: custom map with MapLibre GL JS
 
