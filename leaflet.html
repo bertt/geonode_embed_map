@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeoNode layers in a custom Leaflet map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 960px; padding: 1rem; }
+    #map { height: 600px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>GeoNode layers in a custom Leaflet map</h1>
+  <p>
+    Layer <code>geonode:dados_dos_postos_prfs</code> from the public GeoNode demo instance,
+    shown as a WMS layer and as clickable WFS (GeoJSON) features.
+  </p>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Replace with your own GeoNode host and layer name (workspace:name)
+    const GEONODE = 'https://stable.demo.geonode.org';
+    const LAYER = 'geonode:dados_dos_postos_prfs';
+    const OWS = `${GEONODE}/geoserver/ows`;
+
+    const map = L.map('map').setView([-15, -48], 4);
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const wms = L.tileLayer.wms(OWS, {
+      layers: LAYER, format: 'image/png', transparent: true
+    }).addTo(map);
+
+    // WFS as GeoJSON: requires CORS to be enabled on the GeoServer (it is on the demo)
+    const wfsUrl = `${OWS}?service=WFS&version=1.0.0&request=GetFeature` +
+      `&typeName=${LAYER}&outputFormat=application/json&maxFeatures=500&srsName=EPSG:4326`;
+    const wfs = L.geoJSON(null, {
+      pointToLayer: (f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#c00' }),
+      onEachFeature: (f, layer) => {
+        const rows = Object.entries(f.properties)
+          .map(([k, v]) => `<tr><th>${k}</th><td>${v ?? ''}</td></tr>`).join('');
+        layer.bindPopup(`<table>${rows}</table>`);
+      }
+    }).addTo(map);
+
+    fetch(wfsUrl).then(r => r.json()).then(data => wfs.addData(data));
+
+    L.control.layers({ OpenStreetMap: osm }, { 'WMS layer': wms, 'WFS features': wfs }).addTo(map);
+  </script>
+</body>
+</html>

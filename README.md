@@ -2,11 +2,16 @@
 
 This repository shows how to embed a map created in [GeoNode](https://geonode.org) in a static HTML page hosted on GitHub Pages. The example uses a map from the public demo instance `stable.demo.geonode.org`.
 
-Live demo: https://bertt.github.io/geonode_embed_map/
+Live demos:
+
+- Option 1 (iframe): https://bertt.github.io/geonode_embed_map/
+- Option 2 (Leaflet, WMS/WFS): https://bertt.github.io/geonode_embed_map/leaflet.html
 
 > Demo instances are reset periodically. If the example map is gone, pick another one from https://stable.demo.geonode.org/catalogue/#/maps and update the URL in `index.html`.
 
 ## Option 1: iframe (simplest)
+
+Live example: https://bertt.github.io/geonode_embed_map/ (source: [`index.html`](index.html))
 
 GeoNode provides an embed URL for every map:
 
@@ -46,6 +51,8 @@ Use the OGC services of the layers in your map (WMS/WFS/WMTS):
   }).addTo(map);
 </script>
 ```
+
+Live example (WMS layer plus clickable WFS features): https://bertt.github.io/geonode_embed_map/leaflet.html (source: [`leaflet.html`](leaflet.html))
 
 WMS images usually work without extra setup; for WFS/GeoJSON requests enable **CORS** for `https://YOURNAME.github.io` on GeoServer/GeoNode.
 
